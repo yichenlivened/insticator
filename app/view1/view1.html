@@ -1,0 +1,45 @@
+<div class="container">
+    <div>
+        <div class="card">
+            <div id="question-mode" ng-show="!end">
+                <div class="section question-section">
+                <div class="photo" style="background-image: url({{image}});">
+                </div>
+                <p class="question">{{question}}</p>
+                </div>
+                <p class="section answer-section"  ng-class="{right : right == 1, wrong : wrong == 1}" ng-click="choose(1)">{{option1}}</p>
+                <p class="section answer-section" ng-class="{right : right == 2, wrong : wrong == 2}" ng-click="choose(2)">{{option2}}</p>
+                <p class="section answer-section" ng-class="{right : right == 3, wrong : wrong == 3}" ng-click="choose(3)">{{option3}}</p>
+                <p class="section answer-section" ng-class="{right : right == 4, wrong : wrong == 4}" ng-click="choose(4)">{{option4}}</p>
+                <div class="footer darkerblue"></div>
+            </div>
+
+            <div id="outcome-mode" ng-show="end">
+                <p class="result">results</p>
+                <svg class="underline" height="6" width="40">
+                    <line x1="0" y1="0" x2="40" y2="0" />
+                </svg>
+                <div class="section score-board"}>
+                    <div class="score incorrect">
+                        <p id="incorrect" class="number">0{{5 - correct}}</p>
+                        <svg class="underline" height="6" width="40">
+                            <line x1="0" y1="0" x2="40" y2="0" />
+                        </svg>
+                        <p class="label">incorrect</p>
+                    </div>
+                    <div class="score correct">
+                        <p id="correct" class="number">0{{correct}}</p>
+                        <svg class="underline" height="6" width="40">
+                            <line x1="0" y1="0" x2="40" y2="0" />
+                        </svg>
+                        <p class="label">correct</p>
+                    </div>
+                </div>
+                <div class="section play" ng-click="start()">
+                    play again
+                </div>
+                <div class="footer yellow"></div>
+            </div>
+        </div>
+    </div>
+</div>
