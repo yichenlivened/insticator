@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('insticator.game', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view1', {
-    templateUrl: 'view1/view1.html',
-    controller: 'View1Ctrl'
+  $routeProvider.when('/game', {
+    templateUrl: 'view/game.html',
+    controller: 'GameCtrl'
   });
 }])
 
-.controller('View1Ctrl', [ '$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+.controller('GameCtrl', [ '$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
   function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -33,7 +33,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
   function init(){
     //get question data from json
-    $http.get('questions.json').
+    $http.get('asset/questions.json').
     success(function(data) {
       $scope.data = shuffle(data);
       $scope.start();
@@ -68,7 +68,7 @@ angular.module('myApp.view1', ['ngRoute'])
   };
 
   $scope.choose = function(n){
-    if(n == $scope.answer){
+    if(n == 1){
       $scope.right = n;
       $scope.correct++;
     } else{
@@ -78,10 +78,22 @@ angular.module('myApp.view1', ['ngRoute'])
 
     if($scope.questionNumber%5 != 0) {
       $scope.questionNumber++;
+      console.log($scope.correct);
       $timeout( function(){setQuestion();}, 500);
     } else{
       $timeout( function(){
         $scope.end = true;
+        $('.count').each(function () {
+          $(this).prop('Counter',0).animate({
+            Counter: $(this).text()
+          }, {
+            duration: 1000,
+            easing: 'swing',
+            step: function (now) {
+              $(this).text("0"+Math.ceil(now));
+            }
+          });
+        });
       }, 500);
     }
   };

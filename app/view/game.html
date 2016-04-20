@@ -1,5 +1,4 @@
 <div class="container">
-    <div>
         <div class="card">
             <div id="question-mode" ng-show="!end">
                 <div class="section question-section">
@@ -21,14 +20,14 @@
                 </svg>
                 <div class="section score-board"}>
                     <div class="score incorrect">
-                        <p id="incorrect" class="number">0{{5 - correct}}</p>
+                        <p id="incorrect" class="number count">{{5 - correct}}</p>
                         <svg class="underline" height="6" width="40">
                             <line x1="0" y1="0" x2="40" y2="0" />
                         </svg>
                         <p class="label">incorrect</p>
                     </div>
                     <div class="score correct">
-                        <p id="correct" class="number">0{{correct}}</p>
+                        <p id="correct" class="number count">{{correct}}</p>
                         <svg class="underline" height="6" width="40">
                             <line x1="0" y1="0" x2="40" y2="0" />
                         </svg>
