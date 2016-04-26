@@ -11,6 +11,7 @@ angular.module('insticator.game', ['ngRoute'])
 
 .controller('GameCtrl', [ '$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
+  //shuffle array
   function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -30,59 +31,66 @@ angular.module('insticator.game', ['ngRoute'])
     return array;
   }
 
-
+  //init
   function init(){
     //get question data from json
     $http.get('asset/questions.json').
     success(function(data) {
+      $scope.round = 0;
       $scope.data = shuffle(data);
       $scope.start();
     }).
     error(function(data) {
-      // log error
+      console.log('unable to get the data.');
     });
-  }
-
-  function setQuestion(){
-    $scope.right = 0;
-    $scope.wrong = 0;
-    $scope.question = $scope.data[0]['question']['title'];
-    $scope.image = $scope.data[0]['question']['graphicUrl'];
-    $scope.option1 = $scope.data[0]['options'][0]['title'];
-    $scope.option2 = $scope.data[0]['options'][1]['title'];
-    $scope.option3 = $scope.data[0]['options'][2]['title'];
-    $scope.option4 = $scope.data[0]['options'][3]['title'];
-    for (var i = 0; i < 4; i++) {
-        if($scope.data[0]['options'][i]['title'] == $scope.data[0]['result']['title']){
-          $scope.answer = i+1;
-        }
-    }
-    $scope.data.splice(0,1);
   };
 
+  //game begin
   $scope.start = function(){
     $scope.correct = 0;
-    $scope.questionNumber = 1;
+    $scope.round = 1;
+    $scope.questionIndex = 0;
     $scope.end = false;
-    setQuestion();
+    setQuestion($scope.data);
   };
 
-  $scope.choose = function(n){
-    if(n == 1){
-      $scope.right = n;
+  //game again
+  $scope.again = function(){
+    $scope.correct = 0;
+    $scope.round ++;
+    $scope.end = false;
+    $scope.questionIndex = 0;
+    setQuestion($scope.data);
+  };
+
+  //set up view question
+  function setQuestion(data){
+    $scope.questions = data.slice(($scope.round-1) * 5, ($scope.round * 5));
+    console.log($scope.questions);
+  };
+
+  //choose
+  $scope.choose = function(select, answer, index){
+    $scope.selectedIndex = index;
+    $scope.show = true;
+    if(select == answer){
       $scope.correct++;
-    } else{
-      $scope.wrong = n;
-      $scope.right = $scope.answer;
+      console.log('you are right!');
     }
 
-    if($scope.questionNumber%5 != 0) {
-      $scope.questionNumber++;
-      console.log($scope.correct);
-      $timeout( function(){setQuestion();}, 500);
+    if(($scope.questionIndex +1 )%5 != 0) {
+      $timeout( function(){
+        $scope.questionIndex ++;
+      }, 500).then(function(){
+        $scope.show = false;
+      });
     } else{
       $timeout( function(){
+        $scope.questionIndex ++;
+      }, 500).then(function(){
+        $scope.show = false;
         $scope.end = true;
+
         $('.count').each(function () {
           $(this).prop('Counter',0).animate({
             Counter: $(this).text()
@@ -94,7 +102,9 @@ angular.module('insticator.game', ['ngRoute'])
             }
           });
         });
-      }, 500);
+
+      });
+
     }
   };
 

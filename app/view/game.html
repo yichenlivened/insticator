@@ -1,44 +1,43 @@
 <div class="container">
         <div class="card">
-            <div id="question-mode" ng-show="!end">
+            <div id="question-mode" ng-show="questionIndex == $index && !end" ng-repeat="question in questions">
                 <div class="section question-section">
-                <div class="photo" style="background-image: url({{image}});">
+                <div class="photo" style="background-image: url({{question.question.graphicUrl}});">
                 </div>
-                <p class="question">{{question}}</p>
+                <p class="question">{{question.question.title}}</p>
                 </div>
-                <p class="section answer-section"  ng-class="{right : right == 1, wrong : wrong == 1}" ng-click="choose(1)">{{option1}}</p>
-                <p class="section answer-section" ng-class="{right : right == 2, wrong : wrong == 2}" ng-click="choose(2)">{{option2}}</p>
-                <p class="section answer-section" ng-class="{right : right == 3, wrong : wrong == 3}" ng-click="choose(3)">{{option3}}</p>
-                <p class="section answer-section" ng-class="{right : right == 4, wrong : wrong == 4}" ng-click="choose(4)">{{option4}}</p>
+                <p id="{{$index}}" class="section answer-section" ng-class="{right : ((option.title == question.result.title) && show), wrong : ((option.title != question.result.title) && show && $index == selectedIndex)}" ng-click="choose(option.title, question.result.title, $index, $parent.$index)" ng-repeat="option in question.options">{{option.title}}</p>
                 <div class="footer darkerblue"></div>
             </div>
 
             <div id="outcome-mode" ng-show="end">
                 <p class="result">results</p>
                 <svg class="underline" height="6" width="40">
-                    <line x1="0" y1="0" x2="40" y2="0" />
+                    <line x1="0" y1="0" x2="40" y2="0"></line>
                 </svg>
-                <div class="section score-board"}>
+                <div class="section score-board">
                     <div class="score incorrect">
                         <p id="incorrect" class="number count">{{5 - correct}}</p>
                         <svg class="underline" height="6" width="40">
-                            <line x1="0" y1="0" x2="40" y2="0" />
+                            <line x1="0" y1="0" x2="40" y2="0"></line>
                         </svg>
                         <p class="label">incorrect</p>
                     </div>
                     <div class="score correct">
                         <p id="correct" class="number count">{{correct}}</p>
                         <svg class="underline" height="6" width="40">
-                            <line x1="0" y1="0" x2="40" y2="0" />
+                            <line x1="0" y1="0" x2="40" y2="0"></line>
                         </svg>
                         <p class="label">correct</p>
                     </div>
                 </div>
-                <div class="section play" ng-click="start()">
+                <div class="section play" ng-show="round<4" ng-click="again()">
                     play again
+                </div>
+                <div class="section play" ng-show="round == 4">
+                    you finished all the questions!
                 </div>
                 <div class="footer yellow"></div>
             </div>
         </div>
-    </div>
 </div>
